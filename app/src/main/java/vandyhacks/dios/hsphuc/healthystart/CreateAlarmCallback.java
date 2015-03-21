@@ -12,6 +12,5 @@ import vandyhacks.dios.hsphuc.healthystart.Models.Alarm;
 public interface CreateAlarmCallback {
 
     public void openTimePicker(final Context context, final Alarm alarm);
-    public void refreshList();
 
 }
