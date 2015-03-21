@@ -1,8 +1,24 @@
 package vandyhacks.dios.hsphuc.healthystart.Models;
 
+import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by paulrachwalski on 3/21/15.
@@ -11,14 +27,16 @@ public class AlarmManager implements AlarmPersistanceCallback {
 
     private static final String JSON_FILENAME = "alarms.json";
 
+    private Context context;
     private ArrayList<Alarm> alarms;
     private int id_counter;
 
     /**
      * Default constructor for the AlarmManager object
      */
-    public AlarmManager() {
+    public AlarmManager(Context context) {
         alarms = new ArrayList<Alarm>();
+        this.context = context;
         id_counter = 0;
     }
 
@@ -64,11 +82,88 @@ public class AlarmManager implements AlarmPersistanceCallback {
         return alarms.get(index);
     }
 
+    /**
+     * Saves the list of alarms to a file
+     */
     public void save() {
+        JSONArray alarmArray = new JSONArray();
 
+        for (int i = 0; i < alarms.size(); i ++) {
+            Alarm alarm = alarms.get(i);
+            JSONObject jsonAlarm = alarm.toJson();
+
+            alarmArray.put(jsonAlarm);
+        }
+
+        FileWriter jsonFileWriter = null;
+
+        try {
+            FileOutputStream fos = context.openFileOutput(JSON_FILENAME, Context.MODE_PRIVATE);
+            fos.write(alarmArray.toString().getBytes());
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * Loads the list of alarms from a JSON file
+     */
     public void load() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("KK:mm a");
 
+        String json = null;
+        try {
+            FileInputStream is = context.openFileInput(JSON_FILENAME);
+
+            int size = is.available();
+            byte[] buffer = new byte[size];
+
+            is.read(buffer);
+            is.close();
+
+            json = new String(buffer, "UTF-8");
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return;
+        }
+
+        if (json != null) {
+            try {
+                JSONArray jsonArray = new JSONArray(json);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject alarmObject = (JSONObject)jsonArray.get(i);
+                    Calendar time = Calendar.getInstance();
+
+                    int id = -1;
+                    Date date = null;
+                    boolean set = false;
+                    String msg = null;
+
+                    try {
+                        id = alarmObject.getInt(Alarm.ID_TAG);
+                        date = simpleDateFormat.parse(alarmObject.getString(Alarm.TIME_TAG));
+                        set = alarmObject.getBoolean(Alarm.SET_TAG);
+                    } catch (ParseException pe) {
+                        pe.printStackTrace();
+                    }
+
+                    if (date != null && id >= 0) {
+                        time.setTime(date);
+                        Alarm alarm = new Alarm(time);
+                        alarm.setId(id);
+                        alarm.setScheduled(set);
+
+                        alarms.add(alarm);
+                    }
+                }
+
+            } catch (JSONException je) {
+                je.printStackTrace();
+            }
+        }
     }
 }
