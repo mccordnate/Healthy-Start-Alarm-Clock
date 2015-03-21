@@ -1,11 +1,18 @@
 package vandyhacks.dios.hsphuc.healthystart.Models;
 
+import org.json.JSONArray;
+
 import java.util.Calendar;
 
 /**
  * Created by paulrachwalski on 3/21/15.
  */
 public class Alarm {
+
+    public static final String ID_TAG = "id";
+    public static final String TIME_TAG = "time";
+    public static final String SET_TAG = "set";
+    public static final String MSG_TAG = "msg";
 
     private int id;
     private Calendar time;
@@ -20,11 +27,17 @@ public class Alarm {
      * @param time The time of the alarm
      * @param isSet Whether the alarm is set to go off
      */
-    public Alarm(int id, Calendar time, boolean isSet) {
-        this.id = id;
+    public Alarm(Calendar time, boolean isSet) {
         this.time = time;
         this.isSet = isSet;
         this.message = null;
+    }
+
+    /**
+     * Sets the alarm's id
+     */
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**
@@ -84,6 +97,39 @@ public class Alarm {
      */
     public void save() {
         persistanceCallback.save();
+    }
+
+    /**
+     * Should return a JSON array of the relevant fields in the object in order to store on device
+     *
+     * @return The JSON array
+     */
+    public JSONArray toJson() {
+        JSONArray alarmArray = new JSONArray();
+
+        return alarmArray;
+    }
+
+    /**
+     * Schedules the alarm with the phone
+     */
+    public void schedule() {
+        int a = 1;
+        return;
+    }
+
+    /**
+     * Cancels the past alarm and schedules a new one
+     */
+    public void reschedule() {
+        return;
+    }
+
+    /**
+     * Cancels the alarm if it is set
+     */
+    public void unschedule() {
+        return;
     }
 
 }
