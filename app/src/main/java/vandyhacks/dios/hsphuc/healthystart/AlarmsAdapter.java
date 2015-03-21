@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -79,6 +80,17 @@ public class AlarmsAdapter extends ArrayAdapter<Alarm> {
                 public boolean onLongClick(View view) {
                     alarmListCallback.showDeleteConfirmation(context, tempAlarm);
                     return true;
+                }
+            });
+
+            isSetSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        tempAlarm.schedule(context);
+                    } else {
+                        tempAlarm.unschedule(context);
+                    }
                 }
             });
         }

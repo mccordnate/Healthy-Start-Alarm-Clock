@@ -39,7 +39,8 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
 
         alarmsListView = (ListView)findViewById(R.id.alarm_list);
 
-        alarmManager = new AlarmManager();
+        alarmManager = new AlarmManager(this);
+        alarmManager.load();
 
         alarmsAdapter = new AlarmsAdapter(this, R.id.time_text, alarmManager, this);
         alarmsListView.setAdapter(alarmsAdapter);
@@ -54,7 +55,7 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
     @Override
     public void onPause() {
         super.onPause();
-        getSharedPreferences(User.PREFS_NAME, MODE_PRIVATE).edit().clear().commit();
+        alarmManager.save();
     }
 
     @Override

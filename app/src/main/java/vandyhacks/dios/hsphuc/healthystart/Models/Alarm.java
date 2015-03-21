@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.content.Context;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import vandyhacks.dios.hsphuc.healthystart.AlarmReceiver;
@@ -85,6 +88,15 @@ public class Alarm {
     }
 
     /**
+     * Sets the alarm scheduled boolean
+     *
+     * @param scheduled The scheduled boolean
+     */
+    public void setScheduled(boolean scheduled) {
+        this.isScheduled = scheduled;
+    }
+
+    /**
      * Set the alarm's message
      *
      * @param message The new message for the alarm
@@ -121,10 +133,20 @@ public class Alarm {
      *
      * @return The JSON array
      */
-    public JSONArray toJson() {
-        JSONArray alarmArray = new JSONArray();
+    public JSONObject toJson() {
+        JSONObject jsonAlarm = new JSONObject();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("KK:mm a");
 
-        return alarmArray;
+        try {
+            jsonAlarm.put(ID_TAG, this.id);
+            jsonAlarm.put(TIME_TAG, simpleDateFormat.format(this.time.getTime()));
+            jsonAlarm.put(SET_TAG, this.isScheduled);
+            jsonAlarm.put(MSG_TAG, this.message);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return jsonAlarm;
     }
 
     /**
