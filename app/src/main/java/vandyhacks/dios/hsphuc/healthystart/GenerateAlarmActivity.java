@@ -1,5 +1,6 @@
 package vandyhacks.dios.hsphuc.healthystart;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,10 +9,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import vandyhacks.dios.hsphuc.healthystart.Heartrate.HeartRateMonitor;
 import vandyhacks.dios.hsphuc.healthystart.R;
 
 public class GenerateAlarmActivity extends Activity {
 
+    static final int GET_HEARTRATE = 1;  // The request code
     MediaPlayer mp;
     int timesPlayed = 0;
 
@@ -60,16 +63,24 @@ public class GenerateAlarmActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void beginMeasureHeartRate(View v) throws InterruptedException {
+    public void beginMeasureHeartRate(View v) {
         mp.pause();
-        //do measure heartrate activity here return a bool
-        boolean highHeartRate = true;
-        if (!highHeartRate)
-            mp.start();
-        else {
-            mp.stop();
-            mp.release();
-            finish();
+        Intent intent = new Intent(this, HeartRateMonitor.class);
+        startActivityForResult(intent, GET_HEARTRATE);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data) {
+        if (requestCode == GET_HEARTRATE) {
+            if (resultCode == RESULT_OK) {
+                if (!data.getBooleanExtra("highHeartRate", false))
+                    mp.start();
+                else {
+                    mp.stop();
+                    mp.release();
+                    finish();
+                }
+            }
         }
     }
 }
