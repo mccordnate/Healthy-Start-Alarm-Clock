@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import vandyhacks.dios.hsphuc.healthystart.Models.Alarm;
 import vandyhacks.dios.hsphuc.healthystart.Models.AlarmManager;
@@ -20,12 +21,16 @@ import vandyhacks.dios.hsphuc.healthystart.Models.AlarmManager;
 public class AlarmsAdapter extends ArrayAdapter<Alarm> {
 
     private Context context;
+    private CreateAlarmCallback createAlarmCallback;
+
     private AlarmManager alarmManager;
 
-    public AlarmsAdapter(Context context, int textViewResourceId, AlarmManager alarmManager) {
+    public AlarmsAdapter(Context context, int textViewResourceId, AlarmManager alarmManager,
+                         CreateAlarmCallback callback) {
         super(context, textViewResourceId, new ArrayList<Alarm>());
 
         this.context = context;
+        this.createAlarmCallback = callback;
         this.alarmManager = alarmManager;
     }
 
@@ -41,6 +46,12 @@ public class AlarmsAdapter extends ArrayAdapter<Alarm> {
 
         if (alarmManager.size() == 0) {
             view = inflater.inflate(R.layout.alarm_list_new_item, parent, false);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    createAlarmCallback.openTimePicker();
+                }
+            });
         } else {
             Alarm alarm = alarmManager.get(position);
 

@@ -13,15 +13,18 @@ public class User {
     private static final String USER_INTENSITY = "UserIntensity";
     private static final String USER_TARGET_HR = "UserTargetHeartrate";
 
+    private SharedPreferences sharedPreferences;
+
     private int age;
     private double intensity;
     private int targetHeartRate;
+    private boolean loaded;
 
     /**
      * Null constructor to be used when just loading data from the device
      */
     public User() {
-        return;
+        this.loaded = false;
     }
 
     /**
@@ -34,6 +37,9 @@ public class User {
         this.intensity = 0.65;
 
         this.findTargetHeartrate();
+        if (sharedPreferences != null) {
+            save(sharedPreferences);
+        }
     }
 
     /**
@@ -60,6 +66,18 @@ public class User {
     public void setIntensity(double intensity) {
         this.intensity = intensity;
         this.findTargetHeartrate();
+
+        if (sharedPreferences != null) {
+            save(sharedPreferences);
+        }
+    }
+
+    public void setLoaded(boolean loaded) {
+        this.loaded = loaded;
+    }
+
+    public boolean getLoaded() {
+        return this.loaded;
     }
 
     /**
@@ -84,8 +102,10 @@ public class User {
      * @param preferences The SharedPreferences for the calling activity
      */
     public void load(SharedPreferences preferences) {
+        this.sharedPreferences = preferences;
+
         this.age = preferences.getInt(USER_AGE, 25);
         this.intensity = (double)preferences.getFloat(USER_INTENSITY, 0.65f);
-        this.targetHeartRate = preferences.getInt(USER_TARGET_HR, 127);
+        this.targetHeartRate = preferences.getInt(USER_TARGET_HR, 0);
     }
 }

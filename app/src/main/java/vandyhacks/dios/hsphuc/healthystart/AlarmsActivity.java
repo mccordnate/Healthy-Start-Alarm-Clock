@@ -1,34 +1,34 @@
 package vandyhacks.dios.hsphuc.healthystart;
 
+import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.support.v7.app.ActionBarActivity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.util.Calendar;
 
-import vandyhacks.dios.hsphuc.healthystart.R;
 import vandyhacks.dios.hsphuc.healthystart.Models.Alarm;
-import vandyhacks.dios.hsphuc.healthystart.Models.Alarm;
-
-import java.util.Calendar;
-import java.util.Date;
-
 import vandyhacks.dios.hsphuc.healthystart.Models.AlarmManager;
+import vandyhacks.dios.hsphuc.healthystart.Models.User;
 
 
-public class AlarmsActivity extends ActionBarActivity {
+public class AlarmsActivity extends ActionBarActivity implements CreateAlarmCallback {
 
     private ListView alarmsListView;
     private AlarmsAdapter alarmsAdapter;
 
     private AlarmManager alarmManager;
+
+    private int age;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,16 +39,21 @@ public class AlarmsActivity extends ActionBarActivity {
 
         alarmManager = new AlarmManager();
 
-        Calendar cal = Calendar.getInstance();
-        Alarm alarmA = new Alarm(cal, false);
-        Alarm alarmB = new Alarm(cal, false);
-        //alarmManager.addAlarm(alarmA);
-        //alarmManager.addAlarm(alarmB);
-
-        alarmsAdapter = new AlarmsAdapter(this, R.id.time_text, alarmManager);
+        alarmsAdapter = new AlarmsAdapter(this, R.id.time_text, alarmManager, this);
         alarmsListView.setAdapter(alarmsAdapter);
+
+        User user = ((HealthyStartApplication)getApplication()).user;
+
+        if (user.getTargetHeartRate() == 0) {
+            showAgeDialog();
+        }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        getSharedPreferences(User.PREFS_NAME, MODE_PRIVATE).edit().clear().commit();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,7 +80,36 @@ public class AlarmsActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void openTimePicker() {
+    public void refreshList() {
+        alarmsAdapter.notifyDataSetChanged();
+    }
+
+    private void showAgeDialog() {
+        final Dialog d = new Dialog(this);
+        d.setTitle("Select your age");
+        d.setContentView(R.layout.age_dialog);
+        Button b1 = (Button) d.findViewById(R.id.button1);
+        final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
+        np.setMaxValue(100);
+        np.setMinValue(5);
+        np.setWrapSelectorWheel(false);
+        b1.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                age = np.getValue();
+
+                // Set the user's age and save it to the device
+                ((HealthyStartApplication)getApplication()).user = new User(age);
+                SharedPreferences sharedPreferences = getSharedPreferences(User.PREFS_NAME, MODE_PRIVATE);
+                ((HealthyStartApplication) getApplication()).user.save(sharedPreferences);
+                d.dismiss();
+            }
+        });
+        d.show();
+    }
+
+    public void openTimePicker() {
         Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
@@ -86,9 +120,14 @@ public class AlarmsActivity extends ActionBarActivity {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.HOUR_OF_DAY, selectedHour);
                 calendar.set(Calendar.MINUTE, selectedMinute);
+
+                Alarm alarm = new Alarm(calendar, true);
+                alarmManager.addAlarm(alarm);
+                refreshList();
             }
         }, hour, minute, false);
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
+        return;
     }
 }
