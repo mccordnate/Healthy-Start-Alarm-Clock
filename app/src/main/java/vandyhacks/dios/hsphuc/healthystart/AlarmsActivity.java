@@ -140,6 +140,7 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
                         Calendar time = Calendar.getInstance();
                         time.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
                         time.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+                        time.set(Calendar.SECOND, 0);
 
                         if (alarm == null) {
                             Alarm alarm = new Alarm(time);

@@ -31,6 +31,8 @@
         <activity
             android:name=".GenerateAlarmActivity"
             android:label="@string/title_activity_generate_alarm" />
+
+        <receiver android:name="AlarmReceiver"/>
     </application>
 
 </manifest>
