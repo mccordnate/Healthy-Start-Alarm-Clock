@@ -1,7 +1,9 @@
 package vandyhacks.dios.hsphuc.healthystart;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
@@ -119,27 +121,42 @@ public class AlarmsActivity extends ActionBarActivity implements CreateAlarmCall
         Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
-        TimePickerDialog mTimePicker;
-        mTimePicker = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                Calendar time = Calendar.getInstance();
-                time.set(Calendar.HOUR_OF_DAY, selectedHour);
-                time.set(Calendar.MINUTE, selectedMinute);
 
-                if (alarm == null) {
-                    Alarm alarm = new Alarm(time);
-                    alarmManager.addAlarm(alarm);
-                    alarm.schedule(context);
-                } else {
-                    alarm.setTime(context, time);
-                }
+        final TimePicker timePicker = new TimePicker(this);
+        timePicker.setIs24HourView(false);
+        timePicker.setCurrentHour(hour);
+        timePicker.setCurrentMinute(minute);
 
-                refreshList();
-            }
-        }, hour, minute, false);
-        mTimePicker.setTitle("Select Time");
-        mTimePicker.show();
+        new AlertDialog.Builder(this)
+                .setTitle("Test")
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Calendar time = Calendar.getInstance();
+                        time.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+                        time.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+
+                        if (alarm == null) {
+                            Alarm alarm = new Alarm(time);
+                            alarmManager.addAlarm(alarm);
+                            alarm.schedule(context);
+                        } else {
+                            alarm.setTime(context, time);
+                        }
+                        Log.i("MANAGER SIZE", "size: " + alarmManager.size());
+                        refreshList();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                Log.d("Picker", "Cancelled!");
+                            }
+                        }).setView(timePicker).show();
         return;
     }
 }
