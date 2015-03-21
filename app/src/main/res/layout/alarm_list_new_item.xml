@@ -7,20 +7,23 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="5"
+        android:layout_weight="4"
         android:gravity="center"
+        android:layout_marginLeft="20dp"
 
         android:text="@string/plus"
-        android:textSize="50sp"/>
+        android:textSize="50sp"
+        android:textColor="@color/white"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:paddingRight="30dp"
+        android:layout_marginRight="25dp"
 
         android:text="@string/add_new_alarm"
-        android:textSize="28sp"/>
+        android:textSize="27sp"
+        android:textColor="@color/white"/>
 
 </LinearLayout>
