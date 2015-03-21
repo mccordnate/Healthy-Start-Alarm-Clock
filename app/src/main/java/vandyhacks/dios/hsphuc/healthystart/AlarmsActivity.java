@@ -1,6 +1,7 @@
 package vandyhacks.dios.hsphuc.healthystart;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -40,8 +41,8 @@ public class AlarmsActivity extends ActionBarActivity {
         alarmManager = new AlarmManager();
 
         Calendar cal = Calendar.getInstance();
-        Alarm alarmA = new Alarm(cal, false);
-        Alarm alarmB = new Alarm(cal, false);
+        Alarm alarmA = new Alarm(cal);
+        Alarm alarmB = new Alarm(cal);
         //alarmManager.addAlarm(alarmA);
         //alarmManager.addAlarm(alarmB);
 
@@ -68,14 +69,18 @@ public class AlarmsActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if(id == R.id.action_add_alarm){
-            openTimePicker();
+            openTimePicker(this);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void openTimePicker() {
+    /**
+     * Opens up the dialog for the Time Picker to pick what time the alarm will be set
+     * Creates a new alarm based off of this time
+     */
+    private void openTimePicker(final Context context) {
         Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
@@ -83,9 +88,11 @@ public class AlarmsActivity extends ActionBarActivity {
         mTimePicker = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.HOUR_OF_DAY, selectedHour);
-                calendar.set(Calendar.MINUTE, selectedMinute);
+                Calendar time = Calendar.getInstance();
+                time.set(Calendar.HOUR_OF_DAY, selectedHour);
+                time.set(Calendar.MINUTE, selectedMinute);
+                Alarm alarm = new Alarm(time);
+                alarm.schedule(context);
             }
         }, hour, minute, false);
         mTimePicker.setTitle("Select Time");

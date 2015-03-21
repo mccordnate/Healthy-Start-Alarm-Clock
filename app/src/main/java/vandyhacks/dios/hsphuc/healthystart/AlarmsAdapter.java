@@ -53,7 +53,7 @@ public class AlarmsAdapter extends ArrayAdapter<Alarm> {
             timeTextView.setText(time);
 
             Switch isSetSwitch = (Switch)view.findViewById(R.id.set_switch);
-            isSetSwitch.setChecked(alarm.isSet());
+            isSetSwitch.setChecked(alarm.isScheduled());
         }
 
         return view;
