@@ -7,7 +7,7 @@
     <string name="add_new_alarm">Create New Alarm</string>
     <string name="plus">+</string>
     <string name="default_text">---</string>
-    
+
     <string name="title_activity_generate_alarm">GenerateAlarmActivity</string>
     <string name="measureheartrate">Click to measure heartrate</string>
 

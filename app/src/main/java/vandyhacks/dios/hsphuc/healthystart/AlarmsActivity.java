@@ -32,8 +32,8 @@ public class AlarmsActivity extends ActionBarActivity {
         Calendar cal = Calendar.getInstance();
         Alarm alarmA = new Alarm(cal, false);
         Alarm alarmB = new Alarm(cal, false);
-        alarmManager.addAlarm(alarmA);
-        alarmManager.addAlarm(alarmB);
+        //alarmManager.addAlarm(alarmA);
+        //alarmManager.addAlarm(alarmB);
 
         alarmsAdapter = new AlarmsAdapter(this, R.id.time_text, alarmManager);
         alarmsListView.setAdapter(alarmsAdapter);
