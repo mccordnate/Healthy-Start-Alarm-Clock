@@ -35,7 +35,7 @@ public class Alarm {
      */
     public Alarm(Calendar time) {
         this.time = time;
-        this.isScheduled = isScheduled;
+        this.isScheduled = false;
         this.message = null;
     }
 
@@ -131,11 +131,11 @@ public class Alarm {
      * Schedules the alarm with the phone
      */
     public void schedule(Context context) {
-        /*Intent intent = new Intent(context, AlarmReceiver.class);
+        Intent intent = new Intent(context, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
         AlarmManager androidAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         androidAlarmManager.set(AlarmManager.RTC, time.getTimeInMillis(), pendingIntent);
-        isScheduled = true;*/
+        isScheduled = true;
     }
 
     /**
@@ -152,11 +152,11 @@ public class Alarm {
      * Cancels the alarm if it is set
      */
     public void unschedule(Context context) {
-        /*Intent intent = new Intent(context, AlarmReceiver.class);
+        Intent intent = new Intent(context, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
         AlarmManager androidAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         androidAlarmManager.cancel(pendingIntent);
-        isScheduled = false;*/
+        isScheduled = false;
     }
 
 }
