@@ -12,15 +12,29 @@ public class AlarmManager implements AlarmPersistanceCallback {
     private static final String JSON_FILENAME = "alarms.json";
 
     private ArrayList<Alarm> alarms;
+    private int id_counter;
 
+    /**
+     * Default constructor for the AlarmManager object
+     */
     public AlarmManager() {
         alarms = new ArrayList<Alarm>();
+        id_counter = 0;
     }
 
+    /**
+     * Adds the alarm to the manager
+     * @param alarm The alarm to add
+     */
     public void addAlarm(Alarm alarm) {
         alarms.add(alarm);
+        alarm.setId(++id_counter);
     }
 
+    /**
+     * Removes the alarm from the list
+     * @param alarm The alarm to remove
+     */
     public void removeAlarm(Alarm alarm) {
         alarms.remove(alarm);
     }
@@ -42,7 +56,19 @@ public class AlarmManager implements AlarmPersistanceCallback {
         }
     }
 
+    public int size() {
+        return alarms.size();
+    }
+
+    public Alarm get(int index) {
+        return alarms.get(index);
+    }
+
     public void save() {
+
+    }
+
+    public void load() {
 
     }
 }
