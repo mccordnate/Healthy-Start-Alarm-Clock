@@ -15,7 +15,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.TextView;
-import android.R;
+import vandyhacks.dios.hsphuc.healthystart.R;
 
 
 /**

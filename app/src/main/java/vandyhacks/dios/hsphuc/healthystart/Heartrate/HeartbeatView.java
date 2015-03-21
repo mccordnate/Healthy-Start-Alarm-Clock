@@ -8,7 +8,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
-import android.R;
+import vandyhacks.dios.hsphuc.healthystart.R;
 
 
 /**

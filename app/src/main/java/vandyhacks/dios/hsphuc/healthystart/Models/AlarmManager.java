@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class AlarmManager implements AlarmPersistanceCallback {
 
-    private static final String JSON_FILENAME = ""
+    private static final String JSON_FILENAME = "alarms.json";
 
     private ArrayList<Alarm> alarms;
 

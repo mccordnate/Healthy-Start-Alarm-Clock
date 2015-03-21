@@ -1,6 +1,9 @@
 package vandyhacks.dios.hsphuc.healthystart;
 
+import android.content.Context;
 import android.widget.ArrayAdapter;
+
+import java.util.List;
 
 import vandyhacks.dios.hsphuc.healthystart.Models.Alarm;
 
@@ -9,7 +12,8 @@ import vandyhacks.dios.hsphuc.healthystart.Models.Alarm;
  */
 public class AlarmsAdapter extends ArrayAdapter<Alarm> {
 
-    public AlarmsAdapter() {
-        super();
+    public AlarmsAdapter(Context context, int textViewResourceId,
+                         List<Alarm> objects) {
+        super(context, textViewResourceId, objects);
     }
 }
