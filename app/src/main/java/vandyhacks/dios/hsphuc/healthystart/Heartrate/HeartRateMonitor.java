@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
@@ -114,7 +115,7 @@ public class HeartRateMonitor extends Activity {
         camera = null;
     }
 
-    private static PreviewCallback previewCallback = new PreviewCallback() {
+    private PreviewCallback previewCallback = new PreviewCallback() {
 
         /**
          * {@inheritDoc}
@@ -199,13 +200,24 @@ public class HeartRateMonitor extends Activity {
                 text.setText(String.valueOf(beatsAvg));
                 startTime = System.currentTimeMillis();
                 beats = 0;
+
+                if (beatsAvg > 3) {
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("highHeartRate", true);
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
+                } else if (totalTimeInSecs > 30) {
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("highHeartRate", false);
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
+                }
             }
             processing.set(false);
         }
     };
 
-    private static SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
-
+    private SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
         /**
          * {@inheritDoc}
          */

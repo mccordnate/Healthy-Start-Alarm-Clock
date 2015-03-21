@@ -1,14 +1,20 @@
 package vandyhacks.dios.hsphuc.healthystart.Models;
 
+import android.app.*;
+import android.app.AlarmManager;
+import android.content.Intent;
+import android.content.Context;
+
 import org.json.JSONArray;
 
 import java.util.Calendar;
+
+import vandyhacks.dios.hsphuc.healthystart.AlarmsActivity;
 
 /**
  * Created by paulrachwalski on 3/21/15.
  */
 public class Alarm {
-
     public static final String ID_TAG = "id";
     public static final String TIME_TAG = "time";
     public static final String SET_TAG = "set";
@@ -16,7 +22,7 @@ public class Alarm {
 
     private int id;
     private Calendar time;
-    private boolean isSet;
+    private boolean isScheduled;
     private String message;
 
     private AlarmPersistanceCallback persistanceCallback;
@@ -25,11 +31,10 @@ public class Alarm {
      * Default alarm constructor
      *
      * @param time The time of the alarm
-     * @param isSet Whether the alarm is set to go off
      */
-    public Alarm(Calendar time, boolean isSet) {
+    public Alarm(Calendar time) {
         this.time = time;
-        this.isSet = isSet;
+        this.isScheduled = isScheduled;
         this.message = null;
     }
 
@@ -50,6 +55,17 @@ public class Alarm {
     }
 
     /**
+     * Sets the alarm's time
+     */
+    public void setTime(Context context, Calendar time){
+        if(isScheduled){
+            reschedule(context, time);
+        } else {
+            this.time = time;
+        }
+    }
+
+    /**
      * Gets the alarm's time
      *
      * @return The Calendar object of the time
@@ -63,8 +79,8 @@ public class Alarm {
      *
      * @return The boolean for whether it is set or not
      */
-    public boolean isSet() {
-        return this.isSet;
+    public boolean isScheduled() {
+        return this.isScheduled;
     }
 
     /**
@@ -113,23 +129,33 @@ public class Alarm {
     /**
      * Schedules the alarm with the phone
      */
-    public void schedule() {
-        int a = 1;
-        return;
+    public void schedule(Context context) {
+        /*Intent intent = new Intent(context, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
+        AlarmManager androidAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        androidAlarmManager.set(AlarmManager.RTC, time.getTimeInMillis(), pendingIntent);
+        isScheduled = true;*/
     }
 
     /**
      * Cancels the past alarm and schedules a new one
      */
-    public void reschedule() {
-        return;
+    public void reschedule(Context context, Calendar newTime) {
+        unschedule(context);
+        this.time = newTime;
+        schedule(context);
+        isScheduled = true;
     }
 
     /**
      * Cancels the alarm if it is set
      */
-    public void unschedule() {
-        return;
+    public void unschedule(Context context) {
+        /*Intent intent = new Intent(context, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
+        AlarmManager androidAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        androidAlarmManager.cancel(pendingIntent);
+        isScheduled = false;*/
     }
 
 }

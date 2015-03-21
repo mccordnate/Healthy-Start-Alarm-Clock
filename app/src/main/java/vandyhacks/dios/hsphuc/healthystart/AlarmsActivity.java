@@ -3,6 +3,8 @@ package vandyhacks.dios.hsphuc.healthystart;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
+import android.content.Context;
+import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -73,7 +75,7 @@ public class AlarmsActivity extends ActionBarActivity implements CreateAlarmCall
         if (id == R.id.action_settings) {
             return true;
         } else if(id == R.id.action_add_alarm){
-            openTimePicker();
+            openTimePicker(this, null);
             return true;
         }
 
@@ -109,7 +111,11 @@ public class AlarmsActivity extends ActionBarActivity implements CreateAlarmCall
         d.show();
     }
 
-    public void openTimePicker() {
+    /**
+     * Opens up the dialog for the Time Picker to pick what time the alarm will be set
+     * Creates a new alarm based off of this time
+     */
+    public void openTimePicker(final Context context, final Alarm alarm) {
         Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
@@ -117,12 +123,18 @@ public class AlarmsActivity extends ActionBarActivity implements CreateAlarmCall
         mTimePicker = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.HOUR_OF_DAY, selectedHour);
-                calendar.set(Calendar.MINUTE, selectedMinute);
+                Calendar time = Calendar.getInstance();
+                time.set(Calendar.HOUR_OF_DAY, selectedHour);
+                time.set(Calendar.MINUTE, selectedMinute);
 
-                Alarm alarm = new Alarm(calendar, true);
-                alarmManager.addAlarm(alarm);
+                if (alarm == null) {
+                    Alarm alarm = new Alarm(time);
+                    alarmManager.addAlarm(alarm);
+                    alarm.schedule(context);
+                } else {
+                    alarm.setTime(context, time);
+                }
+
                 refreshList();
             }
         }, hour, minute, false);

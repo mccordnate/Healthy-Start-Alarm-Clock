@@ -49,7 +49,7 @@ public class AlarmsAdapter extends ArrayAdapter<Alarm> {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    createAlarmCallback.openTimePicker();
+                    createAlarmCallback.openTimePicker(context, null);
                 }
             });
         } else {
@@ -64,7 +64,16 @@ public class AlarmsAdapter extends ArrayAdapter<Alarm> {
             timeTextView.setText(time);
 
             Switch isSetSwitch = (Switch)view.findViewById(R.id.set_switch);
-            isSetSwitch.setChecked(alarm.isSet());
+            isSetSwitch.setChecked(alarm.isScheduled());
+
+            final Alarm tempAlarm = alarm;
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    createAlarmCallback.openTimePicker(context, tempAlarm);
+                }
+            });
         }
 
         return view;
