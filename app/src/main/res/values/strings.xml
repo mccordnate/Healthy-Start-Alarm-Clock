@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">HealthyStart</string>
+    <string name="app_name">Healthy Start</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="add_new_alarm">Create New Alarm</string>
+    <string name="plus">+</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.healthystart.healthystart;
+package vandyhacks.dios.hsphuc.healthystart;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
