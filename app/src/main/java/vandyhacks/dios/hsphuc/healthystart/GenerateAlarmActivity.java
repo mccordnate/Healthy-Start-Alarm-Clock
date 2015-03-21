@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import vandyhacks.dios.hsphuc.healthystart.Heartrate.HeartRateMonitor;
@@ -16,31 +18,28 @@ public class GenerateAlarmActivity extends Activity {
 
     static final int GET_HEARTRATE = 1;  // The request code
     MediaPlayer mp;
-    int timesPlayed = 0;
+    int timesMeasured = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate_alarm);
 
+        Window wind;
+        wind = this.getWindow();
+        wind.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        wind.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+        wind.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+
         mp = MediaPlayer.create(this, R.raw.heartbeat);
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 // TODO Auto-generated method stub
-                if (timesPlayed < 3) {
-                    mp.start();
-                    ++timesPlayed;
-                } else {
-                    mp.stop();
-                    mp.release();
-                    Toast.makeText(getApplicationContext(), "You suck and don't do workout", Toast.LENGTH_LONG);
-                    finish();
-                }
+                mp.start();
             }
         });
         mp.start();
-        ++timesPlayed;
     }
 
 
@@ -64,6 +63,7 @@ public class GenerateAlarmActivity extends Activity {
     }
 
     public void beginMeasureHeartRate(View v) {
+        ++timesMeasured;
         mp.pause();
         Intent intent = new Intent(this, HeartRateMonitor.class);
         startActivityForResult(intent, GET_HEARTRATE);
@@ -73,9 +73,16 @@ public class GenerateAlarmActivity extends Activity {
                                     Intent data) {
         if (requestCode == GET_HEARTRATE) {
             if (resultCode == RESULT_OK) {
-                if (!data.getBooleanExtra("highHeartRate", false))
-                    mp.start();
-                else {
+                if (!data.getBooleanExtra("highHeartRate", false)) {
+                    if (timesMeasured < 3)
+                        mp.start();
+                    else {
+                        mp.stop();
+                        mp.release();
+                        Toast.makeText(getApplicationContext(), "You suck and don't do workout", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                } else {
                     mp.stop();
                     mp.release();
                     finish();

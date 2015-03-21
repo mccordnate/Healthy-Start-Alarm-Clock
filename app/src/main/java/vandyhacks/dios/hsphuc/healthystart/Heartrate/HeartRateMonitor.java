@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import vandyhacks.dios.hsphuc.healthystart.HealthyStartApplication;
 import vandyhacks.dios.hsphuc.healthystart.R;
 
 
@@ -59,6 +60,8 @@ public class HeartRateMonitor extends Activity {
     private static final int[] beatsArray = new int[beatsArraySize];
     private static double beats = 0;
     private static long startTime = 0;
+
+    private static double completeTime = 0;
 
     /**
      * {@inheritDoc}
@@ -174,6 +177,7 @@ public class HeartRateMonitor extends Activity {
             long endTime = System.currentTimeMillis();
             double totalTimeInSecs = (endTime - startTime) / 1000d;
             if (totalTimeInSecs >= 10) {
+                completeTime += totalTimeInSecs;
                 double bps = (beats / totalTimeInSecs);
                 int dpm = (int) (bps * 60d);
                 if (dpm < 30 || dpm > 180) {
@@ -203,15 +207,18 @@ public class HeartRateMonitor extends Activity {
                 startTime = System.currentTimeMillis();
                 beats = 0;
 
-                if (beatsAvg > 3) {
+                if (beatsAvg > ((HealthyStartApplication)getApplication()).user.getTargetHeartRate()) {
                     Intent resultIntent = new Intent();
                     resultIntent.putExtra("highHeartRate", true);
                     setResult(RESULT_OK, resultIntent);
+                    completeTime=0;
                     finish();
-                } else if (totalTimeInSecs > 30) {
+                }
+                if (completeTime > 30) {
                     Intent resultIntent = new Intent();
                     resultIntent.putExtra("highHeartRate", false);
                     setResult(RESULT_OK, resultIntent);
+                    completeTime=0;
                     finish();
                 }
             }
