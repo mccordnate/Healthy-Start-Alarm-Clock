@@ -35,7 +35,7 @@ public class Alarm {
      */
     public Alarm(Calendar time) {
         this.time = time;
-        this.isScheduled = isScheduled;
+        this.isScheduled = false;
         this.message = null;
     }
 
