@@ -148,8 +148,8 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
 
         final TimePicker timePicker = new TimePicker(this);
         timePicker.setIs24HourView(false);
-        timePicker.setCurrentHour(hour);
-        timePicker.setCurrentMinute(minute);
+        timePicker.setCurrentHour(alarm.getTime().get(Calendar.HOUR_OF_DAY));
+        timePicker.setCurrentMinute(alarm.getTime().get(Calendar.MINUTE));
         timePicker.setLayoutParams(layoutParams);
         linearLayout.addView(timePicker);
 
