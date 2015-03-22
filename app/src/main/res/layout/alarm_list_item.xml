@@ -1,27 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="20dp">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
 
-    <TextView
-        android:id="@+id/time_text"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:layout_marginLeft="20dp"
-        android:gravity="center"
 
-        android:text="12:30 PM"
-        android:textColor="@color/white"
-        android:textSize="28sp"/>
+        <TextView
+            android:id="@+id/time_text"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
 
-    <Switch
-        android:id="@+id/set_switch"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:layout_marginRight="25dp"/>
+            android:text="12:30 PM"
+            android:textColor="@color/white"
+            android:textSize="28sp"/>
 
-</LinearLayout>
+        <Switch
+            android:id="@+id/set_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+
+            android:layout_toEndOf="@id/time_text"
+            android:layout_toRightOf="@id/time_text"
+            android:layout_centerVertical="true"
+
+            android:layout_marginEnd="25dp"
+            android:layout_marginRight="25dp"/>
+
+
+        <TextView
+            android:id="@+id/intensity_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/time_text"
+            android:layout_alignParentStart="@id/time_text"
+            android:layout_alignParentLeft="@id/time_text"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+
+            android:text="Intensity: 65%"
+            android:textColor="@color/white"
+            android:textSize="17sp"/>
+
+        <ImageView
+            android:id="@+id/delete_image"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_centerVertical="true"
+
+            android:layout_toEndOf="@id/set_switch"
+            android:layout_toRightOf="@id/set_switch"
+
+            android:src="@drawable/ic_action_discard"/>
+
+
+</RelativeLayout>

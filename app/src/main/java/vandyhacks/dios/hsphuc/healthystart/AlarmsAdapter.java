@@ -1,11 +1,13 @@
 package vandyhacks.dios.hsphuc.healthystart;
 
 import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -61,27 +63,25 @@ public class AlarmsAdapter extends ArrayAdapter<Alarm> {
             view = inflater.inflate(R.layout.alarm_list_item, parent, false);
 
             TextView timeTextView = (TextView)view.findViewById(R.id.time_text);
+            TextView intensityTextView = (TextView)view.findViewById(R.id.intensity_text);
             timeTextView.setText(time);
 
             Switch isSetSwitch = (Switch)view.findViewById(R.id.set_switch);
             isSetSwitch.setChecked(alarm.isScheduled());
 
-            final Alarm tempAlarm = alarm;
+            ImageView deleteAlarmImage = (ImageView)view.findViewById(R.id.delete_image);
 
-            view.setOnClickListener(new View.OnClickListener() {
+
+            final Alarm tempAlarm = alarm;
+            View.OnClickListener editAlarmListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     alarmListCallback.editAlarmClock(context, tempAlarm);
                 }
-            });
+            };
 
-            view.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    alarmListCallback.showDeleteConfirmation(context, tempAlarm);
-                    return true;
-                }
-            });
+            timeTextView.setOnClickListener(editAlarmListener);
+            intensityTextView.setOnClickListener(editAlarmListener);
 
             isSetSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -91,6 +91,13 @@ public class AlarmsAdapter extends ArrayAdapter<Alarm> {
                     } else {
                         tempAlarm.unschedule(context);
                     }
+                }
+            });
+
+            deleteAlarmImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    alarmListCallback.showDeleteConfirmation(context, tempAlarm);
                 }
             });
         }

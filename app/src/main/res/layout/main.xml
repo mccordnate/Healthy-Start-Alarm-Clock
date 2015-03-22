@@ -12,20 +12,22 @@
         android:layout_height="50dp">
         <TextView android:id="@+id/text"
             android:text="@string/default_text"
-            android:textSize="32dp"
+            android:textSize="20dp"
+            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">        
         </TextView>
         <TextView android:id="@+id/target"
             android:text="@string/default_text"
-            android:textSize="32dp"
+            android:layout_gravity="center_vertical"
+            android:textSize="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp">
         </TextView>
         <vandyhacks.dios.hsphuc.healthystart.Heartrate.HeartbeatView
             android:id="@+id/image"
-            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
         </vandyhacks.dios.hsphuc.healthystart.Heartrate.HeartbeatView>
