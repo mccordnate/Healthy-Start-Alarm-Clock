@@ -1,8 +1,11 @@
 package vandyhacks.dios.hsphuc.healthystart;
 
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.app.Activity;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,13 +14,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 import vandyhacks.dios.hsphuc.healthystart.Heartrate.HeartRateMonitor;
 import vandyhacks.dios.hsphuc.healthystart.R;
 
 public class GenerateAlarmActivity extends Activity {
 
     static final int GET_HEARTRATE = 1;  // The request code
-    MediaPlayer mp;
+    MediaPlayer mp = new MediaPlayer();
     int timesMeasured = 0;
 
     @Override
@@ -31,15 +36,15 @@ public class GenerateAlarmActivity extends Activity {
         wind.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         wind.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
-        mp = MediaPlayer.create(this, R.raw.heartbeat);
-        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                // TODO Auto-generated method stub
-                mp.start();
-            }
-        });
-        mp.start();
+        mp.setAudioStreamType(AudioManager.STREAM_ALARM);
+        try {
+            mp.setDataSource(this, RingtoneManager.getActualDefaultRingtoneUri(this, RingtoneManager.TYPE_ALARM));
+            mp.prepare();
+            mp.setLooping(true);
+            mp.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
