@@ -133,7 +133,7 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
         timePicker.setCurrentMinute(minute);
 
         new AlertDialog.Builder(this)
-                .setTitle("Test")
+                .setTitle("Edit Alarm")
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
                     @Override
