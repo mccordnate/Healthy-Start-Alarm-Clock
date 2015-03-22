@@ -11,14 +11,39 @@
 
         android:src="@drawable/alarmsbg"/>
 
-    <Button
-        android:id="@+id/beginmeasureheartratebutton"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="@drawable/redbutton"
-        android:text="@string/measureheartrate"
+    <ImageView
+        android:id="@+id/bigheart"
+        android:src="@drawable/bigwhiteheart"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/target"
+        android:gravity="top|center_horizontal"
+        android:paddingTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Press anywhere to measure heartrate"
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/current"
+        android:gravity="bottom|center_horizontal"
+        android:paddingBottom="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Hold finger tip on camera to measure"
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
+
+    <View
+        android:id="@+id/topview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:onClick="beginMeasureHeartRate"/>
 
 </RelativeLayout>

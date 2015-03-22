@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,6 +82,7 @@ public class HeartRateMonitor extends Activity {
 
         image = findViewById(R.id.image);
         text = (TextView) findViewById(R.id.text);
+        text.setText("Current: --");
         target = (TextView) findViewById(R.id.target);
         target.setText("Target: "+(((HealthyStartApplication)getApplication()).user.getTargetHeartRate()+""));
 
@@ -208,7 +210,7 @@ public class HeartRateMonitor extends Activity {
                     }
                 }
                 int beatsAvg = (beatsArrayAvg / beatsArrayCnt);
-                text.setText(String.valueOf(beatsAvg));
+                text.setText("Current: " + String.valueOf(beatsAvg));
                 startTime = System.currentTimeMillis();
                 beats = 0;
 
