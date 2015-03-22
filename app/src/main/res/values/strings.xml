@@ -12,7 +12,7 @@
     <string name="title_activity_generate_alarm">GenerateAlarmActivity</string>
     <string name="measureheartrate">Click to measure heartrate</string>
     <string name="title_activity_measure_heart_rate">MeasureHeartRateActivity</string>
-    <string name="pressanywhere">Press anywhere to measure heart rate</string>
-    <string name="fingertip">Hold finger tip on camera to measure</string>
+    <string name="pressanywhere">Tap to Continue</string>
+    <string name="fingertip">Hold finger on camera to measure</string>
 
 </resources>

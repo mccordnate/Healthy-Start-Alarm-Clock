@@ -30,15 +30,15 @@ public class HeartbeatView extends View {
     public HeartbeatView(Context context, AttributeSet attr) {
         super(context, attr);
 
-        greenBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.smalloutline);
-        redBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.smallfilledin);
+        greenBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.smallwhiteheart);
+        redBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.smallwhiteheartfull);
     }
 
     public HeartbeatView(Context context) {
         super(context);
 
-        greenBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.smalloutline);
-        redBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.smallfilledin);
+        greenBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.smallwhiteheart);
+        redBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.smallwhiteheartfull);
     }
 
     /**

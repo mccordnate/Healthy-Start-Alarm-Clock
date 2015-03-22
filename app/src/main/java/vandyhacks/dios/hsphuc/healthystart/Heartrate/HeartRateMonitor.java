@@ -43,8 +43,8 @@ public class HeartRateMonitor extends Activity {
     private static SurfaceHolder previewHolder = null;
     private static Camera camera = null;
     private static View image = null;
-    private static TextView text = null;
-    private static TextView target = null;
+    private static TextView targetHrTextView = null;
+    private static TextView currentHrTextView = null;
 
     private static WakeLock wakeLock = null;
 
@@ -100,10 +100,10 @@ public class HeartRateMonitor extends Activity {
         previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
         image = findViewById(R.id.image);
-        text = (TextView) findViewById(R.id.text);
-        text.setText("Current: --");
-        target = (TextView) findViewById(R.id.target);
-        target.setText("Target: " + targetHR + "bpm");
+        targetHrTextView = (TextView) findViewById(R.id.target_hr_text);
+        targetHrTextView.setText("Target: " + targetHR + " bpm");
+        currentHrTextView = (TextView) findViewById(R.id.current_hr_text);
+        currentHrTextView.setText("Current: -- bpm");
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");
@@ -229,7 +229,7 @@ public class HeartRateMonitor extends Activity {
                     }
                 }
                 int beatsAvg = (beatsArrayAvg / beatsArrayCnt);
-                text.setText("Current: " + String.valueOf(beatsAvg));
+                currentHrTextView.setText("Current: " + String.valueOf(beatsAvg) + " bpm");
                 startTime = System.currentTimeMillis();
                 beats = 0;
 
@@ -240,7 +240,7 @@ public class HeartRateMonitor extends Activity {
                     completeTime=0;
                     finish();
                 }
-                if (completeTime > 30) {
+                if (completeTime > 10) {
                     Intent resultIntent = new Intent();
                     resultIntent.putExtra("highHeartRate", false);
                     setResult(RESULT_OK, resultIntent);

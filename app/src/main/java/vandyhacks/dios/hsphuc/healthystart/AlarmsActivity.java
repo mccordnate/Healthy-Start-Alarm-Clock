@@ -107,9 +107,10 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
         d.setContentView(R.layout.age_dialog);
         Button b1 = (Button) d.findViewById(R.id.button1);
         final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
-        np.setMaxValue(100);
+        np.setMaxValue(99);
         np.setMinValue(1);
-        np.setValue(((HealthyStartApplication) getApplication()).user.getAge());
+        int curAge = ((HealthyStartApplication) getApplication()).user.getAge();
+        np.setValue( (curAge == -1) ? 20 : curAge);
         np.setWrapSelectorWheel(false);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,13 +163,13 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
         intensityBarTitle.setText("Intensity: " + tempAlarm.getIntensity() + "%");
 
         final SeekBar intensityBar = new SeekBar(this);
-        intensityBar.setMax(100);
-        intensityBar.setProgress(tempAlarm.getIntensity());
+        intensityBar.setMax(50);
+        intensityBar.setProgress(tempAlarm.getIntensity() - 35);
         intensityBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                intensityBarTitle.setText("Intensity: " + progress + "%");
-                tempAlarm.setIntensity(progress);
+                intensityBarTitle.setText("Intensity: " + (progress + 35) + "%");
+                tempAlarm.setIntensity(progress + 35);
             }
 
             @Override
@@ -235,6 +236,8 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
                         if (alarm.isScheduled()) alarm.unschedule(context);
 
                         alarmManager.removeAlarm(alarm);
+                        alarmManager.save();
+
                         refreshList();
                     }
 

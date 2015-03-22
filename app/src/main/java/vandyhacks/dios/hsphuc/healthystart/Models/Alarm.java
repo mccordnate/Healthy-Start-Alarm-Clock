@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -163,6 +164,7 @@ public class Alarm {
         AlarmManager androidAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         androidAlarmManager.set(AlarmManager.RTC, time.getTimeInMillis(), pendingIntent);
         isScheduled = true;
+        Log.i("ALARM SCHEDULE", "alarm was scheduled");
     }
 
     /**
@@ -185,6 +187,7 @@ public class Alarm {
         AlarmManager androidAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         androidAlarmManager.cancel(pendingIntent);
         isScheduled = false;
+        Log.i("ALARM SCHEDULE", "alarm was unscheduled");
     }
 
     /**
