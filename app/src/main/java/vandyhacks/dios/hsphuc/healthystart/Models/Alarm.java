@@ -21,11 +21,13 @@ public class Alarm {
     public static final String TIME_TAG = "time";
     public static final String SET_TAG = "set";
     public static final String MSG_TAG = "msg";
+    public static final String INTENSITY_TAG = "intensity";
 
     private int id;
     private Calendar time;
     private boolean isScheduled;
     private String message;
+    private int intensity;
 
     private AlarmPersistanceCallback persistanceCallback;
 
@@ -38,6 +40,7 @@ public class Alarm {
         this.time = time;
         this.isScheduled = false;
         this.message = null;
+        this.intensity = 65;
     }
 
     /**
@@ -188,5 +191,13 @@ public class Alarm {
         while(currentTime.getTimeInMillis() > time.getTimeInMillis()){
             time.add(Calendar.DATE, 1);
         }
+    }
+
+    public int getIntensity() {
+        return intensity;
+    }
+
+    public void setIntensity(int intensity) {
+        this.intensity = intensity;
     }
 }

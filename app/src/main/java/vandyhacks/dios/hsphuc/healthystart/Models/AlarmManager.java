@@ -152,11 +152,13 @@ public class AlarmManager implements AlarmPersistanceCallback {
                     Date date = null;
                     boolean set = false;
                     String msg = null;
+                    int intensity = 65;
 
                     try {
                         id = alarmObject.getInt(Alarm.ID_TAG);
                         date = simpleDateFormat.parse(alarmObject.getString(Alarm.TIME_TAG));
                         set = alarmObject.getBoolean(Alarm.SET_TAG);
+                        intensity = alarmObject.getInt(Alarm.INTENSITY_TAG);
                     } catch (ParseException pe) {
                         pe.printStackTrace();
                     }
