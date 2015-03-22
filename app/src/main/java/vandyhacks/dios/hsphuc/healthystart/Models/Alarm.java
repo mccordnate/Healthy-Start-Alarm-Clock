@@ -151,6 +151,7 @@ public class Alarm {
      * Schedules the alarm with the phone
      */
     public void schedule(Context context) {
+        setTimeToNextOccurence();
         Intent intent = new Intent(context, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
         AlarmManager androidAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -179,4 +180,13 @@ public class Alarm {
         isScheduled = false;
     }
 
+    /**
+     * Sets the alarm to the next occurence of the time it is set to
+     */
+    private void setTimeToNextOccurence(){
+        Calendar currentTime = Calendar.getInstance();
+        while(currentTime.getTimeInMillis() > time.getTimeInMillis()){
+            time.add(Calendar.DATE, 1);
+        }
+    }
 }
