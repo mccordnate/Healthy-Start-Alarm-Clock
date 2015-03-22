@@ -1,12 +1,15 @@
 package vandyhacks.dios.hsphuc.healthystart;
 
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Camera;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.app.Activity;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +24,7 @@ import vandyhacks.dios.hsphuc.healthystart.R;
 
 public class GenerateAlarmActivity extends Activity {
 
+    private static PowerManager.WakeLock wakeLock = null;
     static final int GET_HEARTRATE = 1;  // The request code
     MediaPlayer mp = new MediaPlayer();
     int timesMeasured = 0;
@@ -29,6 +33,10 @@ public class GenerateAlarmActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate_alarm);
+        setTitle("Healthy Start");
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");
 
         Window wind;
         wind = this.getWindow();
@@ -47,6 +55,26 @@ public class GenerateAlarmActivity extends Activity {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        wakeLock.acquire();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        wakeLock.release();
+    }
+
     public void beginMeasureHeartRate(View v) {
         ++timesMeasured;
         mp.pause();
@@ -59,17 +87,19 @@ public class GenerateAlarmActivity extends Activity {
         if (requestCode == GET_HEARTRATE) {
             if (resultCode == RESULT_OK) {
                 if (!data.getBooleanExtra("highHeartRate", false)) {
-                    if (timesMeasured < 3)
+                    if (timesMeasured < 3) {
+                        Toast.makeText(getApplicationContext(), "Get your heart rate up!", Toast.LENGTH_LONG).show();
                         mp.start();
-                    else {
+                    } else {
                         mp.stop();
                         mp.release();
-                        Toast.makeText(getApplicationContext(), "You suck and don't do workout", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "You'll get it next time!", Toast.LENGTH_LONG).show();
                         finish();
                     }
                 } else {
                     mp.stop();
                     mp.release();
+                    Toast.makeText(getApplicationContext(), "Good workout!", Toast.LENGTH_LONG).show();
                     finish();
                 }
             }
