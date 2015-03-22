@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -54,6 +55,11 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
         User user = ((HealthyStartApplication)getApplication()).user;
 
         if (user.getAge() == -1) {
+            // Display tutorial
+            Intent intent = new Intent(this, TutorialActivity.class);
+            startActivity(intent);
+
+            // Get user's age
             showAgeDialog();
         }
     }
@@ -83,8 +89,12 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
         if (id == R.id.action_change_age) {
             showAgeDialog();
             return true;
-        } else if(id == R.id.action_add_alarm){
+        } else if(id == R.id.action_add_alarm) {
             editAlarmClock(this, null);
+            return true;
+        } else if (id == R.id.action_tutorial) {
+            Intent intent = new Intent(this, TutorialActivity.class);
+            startActivity(intent);
             return true;
         }
 

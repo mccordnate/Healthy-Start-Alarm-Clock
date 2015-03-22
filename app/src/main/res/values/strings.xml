@@ -3,16 +3,18 @@
 
     <string name="app_name">Healthy Start</string>
     <string name="action_change_age">Change Age</string>
+    <string name="action_tutorial">Tutorial</string>
     <string name="set_age">Set Age</string>
-
     <string name="add_new_alarm">Create New Alarm</string>
     <string name="plus">+</string>
     <string name="default_text">---</string>
-
     <string name="title_activity_generate_alarm">GenerateAlarmActivity</string>
     <string name="measureheartrate">Click to measure heartrate</string>
     <string name="title_activity_measure_heart_rate">MeasureHeartRateActivity</string>
     <string name="pressanywhere">Tap to Continue</string>
     <string name="fingertip">Hold finger on camera to measure</string>
+    <string name="title_activity_tutorial">TutorialActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
