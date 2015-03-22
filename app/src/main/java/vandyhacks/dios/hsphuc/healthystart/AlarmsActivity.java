@@ -35,7 +35,7 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
     private AlarmsAdapter alarmsAdapter;
 
     private AlarmManager alarmManager;
-
+    private Alarm tempAlarm;
     private int age;
 
     @Override
@@ -138,9 +138,10 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
      * Creates a new alarm based off of this time
      */
     public void editAlarmClock(final Context context, final Alarm alarm) {
-        Calendar mcurrentTime = Calendar.getInstance();
-        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-        int minute = mcurrentTime.get(Calendar.MINUTE);
+        tempAlarm = alarm;
+        if (tempAlarm == null) {
+            tempAlarm = new Alarm(Calendar.getInstance());
+        }
 
         LinearLayout linearLayout = new LinearLayout(this);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -148,8 +149,8 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
 
         final TimePicker timePicker = new TimePicker(this);
         timePicker.setIs24HourView(false);
-        timePicker.setCurrentHour(alarm.getTime().get(Calendar.HOUR_OF_DAY));
-        timePicker.setCurrentMinute(alarm.getTime().get(Calendar.MINUTE));
+        timePicker.setCurrentHour(tempAlarm.getTime().get(Calendar.HOUR_OF_DAY));
+        timePicker.setCurrentMinute(tempAlarm.getTime().get(Calendar.MINUTE));
         timePicker.setLayoutParams(layoutParams);
         linearLayout.addView(timePicker);
 
@@ -157,15 +158,16 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
         intensityBarTitle.setGravity(Gravity.CENTER_HORIZONTAL);
         intensityBarTitle.setTextSize(20f);
         intensityBarTitle.setTextColor(getResources().getColor(R.color.titleBarPurple));
-        intensityBarTitle.setText("Intensity: 65%");
+        intensityBarTitle.setText("Intensity: " + tempAlarm.getIntensity() + "%");
 
         final SeekBar intensityBar = new SeekBar(this);
         intensityBar.setMax(100);
-        intensityBar.setProgress(65);
+        intensityBar.setProgress(tempAlarm.getIntensity());
         intensityBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 intensityBarTitle.setText("Intensity: " + progress + "%");
+                tempAlarm.setIntensity(progress);
             }
 
             @Override
@@ -197,11 +199,10 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
                         time.set(Calendar.SECOND, 0);
 
                         if (alarm == null) {
-                            Alarm alarm = new Alarm(time);
-                            alarmManager.addAlarm(alarm);
-                            alarm.schedule(context);
+                            alarmManager.addAlarm(tempAlarm);
+                            tempAlarm.schedule(context);
                         } else {
-                            alarm.setTime(context, time);
+                            tempAlarm.setTime(context, time);
                         }
                         Log.i("MANAGER SIZE", "size: " + alarmManager.size());
                         refreshList();
