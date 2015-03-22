@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -107,16 +108,15 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
         final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
         np.setMaxValue(100);
         np.setMinValue(1);
-        np.setValue(((HealthyStartApplication)getApplication()).user.getAge());
+        np.setValue(((HealthyStartApplication) getApplication()).user.getAge());
         np.setWrapSelectorWheel(false);
-        b1.setOnClickListener(new View.OnClickListener()
-        {
+        b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 age = np.getValue();
 
                 // Set the user's age and save it to the device
-                ((HealthyStartApplication)getApplication()).user = new User(age);
+                ((HealthyStartApplication) getApplication()).user = new User(age);
                 SharedPreferences sharedPreferences = getSharedPreferences(User.PREFS_NAME, MODE_PRIVATE);
                 ((HealthyStartApplication) getApplication()).user.save(sharedPreferences);
                 d.dismiss();
@@ -142,20 +142,21 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
 
-        RelativeLayout relativeLayout = new RelativeLayout(this);
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout linearLayout = new LinearLayout(this);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
 
         final TimePicker timePicker = new TimePicker(this);
         timePicker.setIs24HourView(false);
         timePicker.setCurrentHour(hour);
         timePicker.setCurrentMinute(minute);
         timePicker.setLayoutParams(layoutParams);
-        relativeLayout.addView(timePicker);
-
-        LinearLayout intensityLayout = new LinearLayout(this);
-        intensityLayout.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayout.addView(timePicker);
 
         final TextView intensityBarTitle = new TextView(this);
+        intensityBarTitle.setGravity(Gravity.CENTER_HORIZONTAL);
+        intensityBarTitle.setTextSize(20f);
+        intensityBarTitle.setTextColor(getResources().getColor(R.color.titleBarPurple));
         intensityBarTitle.setText("Intensity: 65%");
 
         final SeekBar intensityBar = new SeekBar(this);
@@ -177,16 +178,13 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
 
             }
         });
-        layoutParams.addRule(RelativeLayout.ABOVE, timePicker.getId());
-        intensityLayout.setLayoutParams(layoutParams);
+
+        linearLayout.setLayoutParams(layoutParams);
         LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         intensityBar.setLayoutParams(linearLayoutParams);
-        intensityLayout.addView(intensityBarTitle);
-        intensityLayout.addView(intensityBar);
+        linearLayout.addView(intensityBarTitle);
+        linearLayout.addView(intensityBar);
 
-        relativeLayout.addView(intensityLayout);
-
-        new AlertDialog.Builder(this)
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialogStyle)
                 .setTitle("Edit Alarm")
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -209,16 +207,16 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
                         refreshList();
                     }
                 })
-                .setNegativeButton(android.R.string.cancel,
-                        new DialogInterface.OnClickListener() {
+                .setNegativeButton(android.R.string.cancel, null).setView(linearLayout);
 
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                Log.d("Picker", "Cancelled!");
-                            }
-                        }).setView(relativeLayout).show();
-        return;
+        Dialog d = builder.show();
+        int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
+        View divider = d.findViewById(dividerId);
+        divider.setBackgroundColor(getResources().getColor(R.color.titleBarPurple));
+
+        int textViewId = d.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
+        TextView tv = (TextView) d.findViewById(textViewId);
+        tv.setTextColor(getResources().getColor(R.color.titleBarPurple));
     }
 
     /**
