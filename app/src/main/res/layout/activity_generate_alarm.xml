@@ -26,7 +26,7 @@
         android:paddingTop="40dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Press anywhere to measure heartrate"
+        android:text="@string/pressanywhere"
         android:textColor="@color/white"
         android:textSize="20sp"/>
 
@@ -36,7 +36,7 @@
         android:paddingBottom="40dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hold finger tip on camera to measure"
+        android:text="@string/fingertip"
         android:textColor="@color/white"
         android:textSize="20sp"/>
 

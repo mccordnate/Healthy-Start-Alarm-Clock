@@ -87,10 +87,10 @@ public class GenerateAlarmActivity extends Activity {
         if (requestCode == GET_HEARTRATE) {
             if (resultCode == RESULT_OK) {
                 if (!data.getBooleanExtra("highHeartRate", false)) {
-                    if (timesMeasured < 3)
-                        Toast.makeText(getApplicationContext(), "Get your heartrate up!", Toast.LENGTH_LONG).show();
+                    if (timesMeasured < 3) {
+                        Toast.makeText(getApplicationContext(), "Get your heart rate up!", Toast.LENGTH_LONG).show();
                         mp.start();
-                    else {
+                    } else {
                         mp.stop();
                         mp.release();
                         Toast.makeText(getApplicationContext(), "You'll get it next time!", Toast.LENGTH_LONG).show();
