@@ -5,12 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import vandyhacks.dios.hsphuc.healthystart.Models.Alarm;
 import vandyhacks.dios.hsphuc.healthystart.Models.AlarmManager;
@@ -21,16 +21,16 @@ import vandyhacks.dios.hsphuc.healthystart.Models.AlarmManager;
 public class AlarmsAdapter extends ArrayAdapter<Alarm> {
 
     private Context context;
-    private CreateAlarmCallback createAlarmCallback;
+    private AlarmListCallback alarmListCallback;
 
     private AlarmManager alarmManager;
 
     public AlarmsAdapter(Context context, int textViewResourceId, AlarmManager alarmManager,
-                         CreateAlarmCallback callback) {
+                         AlarmListCallback callback) {
         super(context, textViewResourceId, new ArrayList<Alarm>());
 
         this.context = context;
-        this.createAlarmCallback = callback;
+        this.alarmListCallback = callback;
         this.alarmManager = alarmManager;
     }
 
@@ -49,7 +49,7 @@ public class AlarmsAdapter extends ArrayAdapter<Alarm> {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    createAlarmCallback.openTimePicker(context, null);
+                    alarmListCallback.showTimePicker(context, null);
                 }
             });
         } else {
@@ -71,7 +71,26 @@ public class AlarmsAdapter extends ArrayAdapter<Alarm> {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    createAlarmCallback.openTimePicker(context, tempAlarm);
+                    alarmListCallback.showTimePicker(context, tempAlarm);
+                }
+            });
+
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    alarmListCallback.showDeleteConfirmation(context, tempAlarm);
+                    return true;
+                }
+            });
+
+            isSetSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        tempAlarm.schedule(context);
+                    } else {
+                        tempAlarm.unschedule(context);
+                    }
                 }
             });
         }
