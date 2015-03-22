@@ -3,5 +3,6 @@
 
     <item name="white" type="color">#FFFFFF</item>
     <item name="titleBarPurple" type="color">#2D1954</item>
+    <color name="transparent">#00000000</color>
 
 </resources>

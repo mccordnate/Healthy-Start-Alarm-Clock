@@ -42,6 +42,10 @@ public class User {
         }
     }
 
+    public int getAge() {
+        return this.age;
+    }
+
     /**
      * Calculates the user's target heartrate based on the intensity
      */

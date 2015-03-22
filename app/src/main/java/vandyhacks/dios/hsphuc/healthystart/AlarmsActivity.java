@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
@@ -73,7 +74,8 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_change_age) {
+            showAgeDialog();
             return true;
         } else if(id == R.id.action_add_alarm){
             showTimePicker(this, null);
@@ -100,7 +102,8 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
         Button b1 = (Button) d.findViewById(R.id.button1);
         final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
         np.setMaxValue(100);
-        np.setMinValue(5);
+        np.setMinValue(1);
+        np.setValue(((HealthyStartApplication)getApplication()).user.getAge());
         np.setWrapSelectorWheel(false);
         b1.setOnClickListener(new View.OnClickListener()
         {
@@ -116,6 +119,14 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
             }
         });
         d.show();
+
+        int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
+        View divider = d.findViewById(dividerId);
+        divider.setBackgroundColor(getResources().getColor(R.color.titleBarPurple));
+
+        int textViewId = d.getContext().getResources().getIdentifier("android:id/title", null, null);
+        TextView tv = (TextView) d.findViewById(textViewId);
+        tv.setTextColor(getResources().getColor(R.color.titleBarPurple));
     }
 
     /**
@@ -132,7 +143,7 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
         timePicker.setCurrentHour(hour);
         timePicker.setCurrentMinute(minute);
 
-        new AlertDialog.Builder(this)
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialogStyle)
                 .setTitle("Edit Alarm")
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
@@ -162,7 +173,16 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
                                                 int which) {
                                 Log.d("Picker", "Cancelled!");
                             }
-                        }).setView(timePicker).show();
+                        }).setView(timePicker);
+
+        Dialog d = builder.show();
+        int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
+        View divider = d.findViewById(dividerId);
+        divider.setBackgroundColor(getResources().getColor(R.color.titleBarPurple));
+
+        int textViewId = d.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
+        TextView tv = (TextView) d.findViewById(textViewId);
+        tv.setTextColor(getResources().getColor(R.color.titleBarPurple));
         return;
     }
 
@@ -170,11 +190,10 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
      * Opens a confirmation dialog to delete an alarm
      */
     public void showDeleteConfirmation(final Context context, final Alarm alarm) {
-        new AlertDialog.Builder(this)
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setTitle("Delete Alarm")
                 .setMessage("Are you sure you want to delete this alarm?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                {
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (alarm.isScheduled()) alarm.unschedule(context);
@@ -184,7 +203,15 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
                     }
 
                 })
-                .setNegativeButton("No", null)
-                .show();
+                .setNegativeButton("No", null);
+
+        Dialog d = builder.show();
+        int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
+        View divider = d.findViewById(dividerId);
+        divider.setBackgroundColor(getResources().getColor(R.color.titleBarPurple));
+
+        int textViewId = d.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
+        TextView tv = (TextView) d.findViewById(textViewId);
+        tv.setTextColor(getResources().getColor(R.color.titleBarPurple));
     }
 }
