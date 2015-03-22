@@ -1,11 +1,10 @@
 package vandyhacks.dios.hsphuc.healthystart.Models;
 
-import android.app.*;
 import android.app.AlarmManager;
-import android.content.Intent;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import vandyhacks.dios.hsphuc.healthystart.AlarmReceiver;
-import vandyhacks.dios.hsphuc.healthystart.AlarmsActivity;
 
 /**
  * Created by paulrachwalski on 3/21/15.
