@@ -18,6 +18,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import vandyhacks.dios.hsphuc.healthystart.HealthyStartApplication;
 import vandyhacks.dios.hsphuc.healthystart.R;
 
@@ -38,6 +40,7 @@ public class HeartRateMonitor extends Activity {
     private static Camera camera = null;
     private static View image = null;
     private static TextView text = null;
+    private static TextView target = null;
 
     private static WakeLock wakeLock = null;
 
@@ -78,6 +81,8 @@ public class HeartRateMonitor extends Activity {
 
         image = findViewById(R.id.image);
         text = (TextView) findViewById(R.id.text);
+        target = (TextView) findViewById(R.id.target);
+        target.setText("Target: "+(((HealthyStartApplication)getApplication()).user.getTargetHeartRate()+""));
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");
