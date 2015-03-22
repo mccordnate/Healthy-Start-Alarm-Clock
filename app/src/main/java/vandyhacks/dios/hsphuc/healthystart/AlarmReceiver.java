@@ -1,12 +1,8 @@
 package vandyhacks.dios.hsphuc.healthystart;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Toast;
 
 /**
  * Created by nate on 3/21/15.

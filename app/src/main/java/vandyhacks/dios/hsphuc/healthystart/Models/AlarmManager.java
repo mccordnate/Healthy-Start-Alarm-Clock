@@ -7,18 +7,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Created by paulrachwalski on 3/21/15.
@@ -47,6 +46,17 @@ public class AlarmManager implements AlarmPersistanceCallback {
     public void addAlarm(Alarm alarm) {
         alarms.add(alarm);
         alarm.setId(++id_counter);
+
+        Collections.sort(alarms, new Comparator<Alarm>() {
+            @Override
+            public int compare(Alarm alarm, Alarm alarm2) {
+                SimpleDateFormat compareFormat = new SimpleDateFormat("aKKmm");
+                String formattedTime1 = compareFormat.format(alarm.getTime().getTime());
+                String formattedTime2 = compareFormat.format(alarm2.getTime().getTime());
+
+                return formattedTime1.compareTo(formattedTime2);
+            }
+        });
     }
 
     /**
@@ -158,6 +168,8 @@ public class AlarmManager implements AlarmPersistanceCallback {
                         alarm.setScheduled(set);
 
                         alarms.add(alarm);
+
+                        if (id > id_counter) id_counter = id;
                     }
                 }
 
