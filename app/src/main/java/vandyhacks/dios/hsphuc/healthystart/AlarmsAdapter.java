@@ -57,7 +57,7 @@ public class AlarmsAdapter extends ArrayAdapter<Alarm> {
         } else {
             Alarm alarm = alarmManager.get(position);
 
-            SimpleDateFormat timeFormat = new SimpleDateFormat("KK:mm a");
+            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
             String time = timeFormat.format(alarm.getTime().getTime());
 
             view = inflater.inflate(R.layout.alarm_list_item, parent, false);
