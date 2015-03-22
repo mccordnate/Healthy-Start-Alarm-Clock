@@ -51,7 +51,7 @@ public class AlarmsAdapter extends ArrayAdapter<Alarm> {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    alarmListCallback.showTimePicker(context, null);
+                    alarmListCallback.editAlarmClock(context, null);
                 }
             });
         } else {
@@ -76,7 +76,7 @@ public class AlarmsAdapter extends ArrayAdapter<Alarm> {
             View.OnClickListener editAlarmListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    alarmListCallback.showTimePicker(context, tempAlarm);
+                    alarmListCallback.editAlarmClock(context, tempAlarm);
                 }
             };
 

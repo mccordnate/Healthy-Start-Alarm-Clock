@@ -11,9 +11,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -78,7 +82,7 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
             showAgeDialog();
             return true;
         } else if(id == R.id.action_add_alarm){
-            showTimePicker(this, null);
+            editAlarmClock(this, null);
             return true;
         }
 
@@ -133,16 +137,56 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
      * Opens up the dialog for the Time Picker to pick what time the alarm will be set
      * Creates a new alarm based off of this time
      */
-    public void showTimePicker(final Context context, final Alarm alarm) {
+    public void editAlarmClock(final Context context, final Alarm alarm) {
         Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
+
+        RelativeLayout relativeLayout = new RelativeLayout(this);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         final TimePicker timePicker = new TimePicker(this);
         timePicker.setIs24HourView(false);
         timePicker.setCurrentHour(hour);
         timePicker.setCurrentMinute(minute);
+        timePicker.setLayoutParams(layoutParams);
+        relativeLayout.addView(timePicker);
 
+        LinearLayout intensityLayout = new LinearLayout(this);
+        intensityLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+        final TextView intensityBarTitle = new TextView(this);
+        intensityBarTitle.setText("Intensity: 65%");
+
+        final SeekBar intensityBar = new SeekBar(this);
+        intensityBar.setMax(100);
+        intensityBar.setProgress(65);
+        intensityBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                intensityBarTitle.setText("Intensity: " + progress + "%");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        layoutParams.addRule(RelativeLayout.ABOVE, timePicker.getId());
+        intensityLayout.setLayoutParams(layoutParams);
+        LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        intensityBar.setLayoutParams(linearLayoutParams);
+        intensityLayout.addView(intensityBarTitle);
+        intensityLayout.addView(intensityBar);
+
+        relativeLayout.addView(intensityLayout);
+
+        new AlertDialog.Builder(this)
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialogStyle)
                 .setTitle("Edit Alarm")
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -173,16 +217,7 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
                                                 int which) {
                                 Log.d("Picker", "Cancelled!");
                             }
-                        }).setView(timePicker);
-
-        Dialog d = builder.show();
-        int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
-        View divider = d.findViewById(dividerId);
-        divider.setBackgroundColor(getResources().getColor(R.color.titleBarPurple));
-
-        int textViewId = d.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
-        TextView tv = (TextView) d.findViewById(textViewId);
-        tv.setTextColor(getResources().getColor(R.color.titleBarPurple));
+                        }).setView(relativeLayout).show();
         return;
     }
 
