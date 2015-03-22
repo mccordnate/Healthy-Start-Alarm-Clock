@@ -53,7 +53,7 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
 
         User user = ((HealthyStartApplication)getApplication()).user;
 
-        if (user.getTargetHeartRate() == 0) {
+        if (user.getAge() == -1) {
             showAgeDialog();
         }
     }
@@ -62,6 +62,7 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
     public void onPause() {
         super.onPause();
         alarmManager.save();
+        //getSharedPreferences(User.PREFS_NAME, MODE_PRIVATE).edit().clear().commit();
     }
 
     @Override
@@ -199,6 +200,7 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
                         time.set(Calendar.SECOND, 0);
 
                         if (alarm == null) {
+                            tempAlarm.setTime(context, time);
                             alarmManager.addAlarm(tempAlarm);
                             tempAlarm.schedule(context);
                         } else {

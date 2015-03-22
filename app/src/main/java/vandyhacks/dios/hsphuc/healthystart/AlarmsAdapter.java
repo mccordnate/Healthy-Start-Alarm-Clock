@@ -65,6 +65,7 @@ public class AlarmsAdapter extends ArrayAdapter<Alarm> {
             TextView timeTextView = (TextView)view.findViewById(R.id.time_text);
             TextView intensityTextView = (TextView)view.findViewById(R.id.intensity_text);
             timeTextView.setText(time);
+            intensityTextView.setText("Intensity: " + alarm.getIntensity() + "%");
 
             Switch isSetSwitch = (Switch)view.findViewById(R.id.set_switch);
             isSetSwitch.setChecked(alarm.isScheduled());

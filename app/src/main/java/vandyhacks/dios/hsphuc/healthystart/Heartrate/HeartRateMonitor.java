@@ -22,6 +22,9 @@ import android.widget.Toast;
 import org.w3c.dom.Text;
 
 import vandyhacks.dios.hsphuc.healthystart.HealthyStartApplication;
+import vandyhacks.dios.hsphuc.healthystart.Models.Alarm;
+import vandyhacks.dios.hsphuc.healthystart.Models.AlarmManager;
+import vandyhacks.dios.hsphuc.healthystart.Models.User;
 import vandyhacks.dios.hsphuc.healthystart.R;
 
 
@@ -66,6 +69,9 @@ public class HeartRateMonitor extends Activity {
     private static long startTime = 0;
 
     private static double completeTime = 0;
+    private Alarm alarm = null;
+    private User user = null;
+    private int targetHR = 0;
 
     /**
      * {@inheritDoc}
@@ -74,6 +80,19 @@ public class HeartRateMonitor extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        int alarmId = getIntent().getIntExtra(Alarm.REQUEST_CODE, 0);
+        AlarmManager alarmManager = new AlarmManager(this);
+        alarmManager.load();
+        for (int i = 0; i < alarmManager.size(); i ++ ) {
+            if (alarmManager.get(i).getId() == alarmId) {
+                alarm = alarmManager.get(i);
+                break;
+            }
+        }
+
+        user = ((HealthyStartApplication)getApplication()).user;
+        targetHR = user.findTargetHeartrate(alarm.getIntensity());
 
         preview = (SurfaceView) findViewById(R.id.preview);
         previewHolder = preview.getHolder();
@@ -84,7 +103,7 @@ public class HeartRateMonitor extends Activity {
         text = (TextView) findViewById(R.id.text);
         text.setText("Current: --");
         target = (TextView) findViewById(R.id.target);
-        target.setText("Target: "+(((HealthyStartApplication)getApplication()).user.getTargetHeartRate()+""));
+        target.setText("Target: " + targetHR + "bpm");
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");
@@ -214,7 +233,7 @@ public class HeartRateMonitor extends Activity {
                 startTime = System.currentTimeMillis();
                 beats = 0;
 
-                if (beatsAvg > ((HealthyStartApplication)getApplication()).user.getTargetHeartRate()) {
+                if (beatsAvg > targetHR) {
                     Intent resultIntent = new Intent();
                     resultIntent.putExtra("highHeartRate", true);
                     setResult(RESULT_OK, resultIntent);

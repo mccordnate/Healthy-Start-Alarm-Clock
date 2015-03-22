@@ -17,7 +17,7 @@ public class HealthyStartApplication extends Application {
 
         user = new User();
         user.load(this.getSharedPreferences(User.PREFS_NAME, MODE_PRIVATE));
-        if (user.getTargetHeartRate() != 0) {
+        if (user.getAge() != -1) {
             user.setLoaded(true);
         }
     }

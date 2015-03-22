@@ -168,6 +168,7 @@ public class AlarmManager implements AlarmPersistanceCallback {
                         Alarm alarm = new Alarm(time);
                         alarm.setId(id);
                         alarm.setScheduled(set);
+                        alarm.setIntensity(intensity);
 
                         alarms.add(alarm);
 

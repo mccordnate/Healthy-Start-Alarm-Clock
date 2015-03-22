@@ -20,6 +20,7 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import vandyhacks.dios.hsphuc.healthystart.Heartrate.HeartRateMonitor;
+import vandyhacks.dios.hsphuc.healthystart.Models.Alarm;
 import vandyhacks.dios.hsphuc.healthystart.R;
 
 public class GenerateAlarmActivity extends Activity {
@@ -28,12 +29,15 @@ public class GenerateAlarmActivity extends Activity {
     static final int GET_HEARTRATE = 1;  // The request code
     MediaPlayer mp = new MediaPlayer();
     int timesMeasured = 0;
+    int alarmId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate_alarm);
         setTitle("Healthy Start");
+
+        alarmId = getIntent().getIntExtra(Alarm.REQUEST_CODE, 0);
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");
@@ -79,6 +83,7 @@ public class GenerateAlarmActivity extends Activity {
         ++timesMeasured;
         mp.pause();
         Intent intent = new Intent(this, HeartRateMonitor.class);
+        intent.putExtra(Alarm.REQUEST_CODE, alarmId);
         startActivityForResult(intent, GET_HEARTRATE);
     }
 

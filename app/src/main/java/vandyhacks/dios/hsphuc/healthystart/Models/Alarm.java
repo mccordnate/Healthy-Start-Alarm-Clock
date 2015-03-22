@@ -22,6 +22,7 @@ public class Alarm {
     public static final String SET_TAG = "set";
     public static final String MSG_TAG = "msg";
     public static final String INTENSITY_TAG = "intensity";
+    public static final String REQUEST_CODE = "request_code";
 
     private int id;
     private Calendar time;
@@ -143,6 +144,7 @@ public class Alarm {
             jsonAlarm.put(TIME_TAG, simpleDateFormat.format(this.time.getTime()));
             jsonAlarm.put(SET_TAG, this.isScheduled);
             jsonAlarm.put(MSG_TAG, this.message);
+            jsonAlarm.put(INTENSITY_TAG, this.intensity);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -156,7 +158,8 @@ public class Alarm {
     public void schedule(Context context) {
         setTimeToNextOccurence();
         Intent intent = new Intent(context, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
+        intent.putExtra(REQUEST_CODE, this.id);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, this.id, intent, 0);
         AlarmManager androidAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         androidAlarmManager.set(AlarmManager.RTC, time.getTimeInMillis(), pendingIntent);
         isScheduled = true;
@@ -177,6 +180,7 @@ public class Alarm {
      */
     public void unschedule(Context context) {
         Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtra(REQUEST_CODE, this.id);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
         AlarmManager androidAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         androidAlarmManager.cancel(pendingIntent);
