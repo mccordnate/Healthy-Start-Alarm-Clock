@@ -116,6 +116,7 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
     private void showAgeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
+        //add number picker
         final NumberPicker np = new NumberPicker(this);
         np.setMinValue(1);
         np.setMaxValue(99);
@@ -128,7 +129,8 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
                 FrameLayout.LayoutParams.WRAP_CONTENT,
                 Gravity.CENTER));
         builder.setView(parent);
-        //set bottoni dialog
+
+        //set button dialog
         builder.setTitle("Change age");
         builder.setPositiveButton("Set Age", new DialogInterface.OnClickListener() {
             @Override
@@ -144,16 +146,10 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
             }
         });
 
-        //visualizzo il dialog
-        Dialog dialog = builder.create();
-        dialog.show();
-        int dividerId = dialog.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
-        View divider = dialog.findViewById(dividerId);
-        divider.setBackgroundColor(getResources().getColor(R.color.titleBarPurple));
-
-        int textViewId = dialog.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
-        TextView tv = (TextView) dialog.findViewById(textViewId);
-        tv.setTextColor(getResources().getColor(R.color.titleBarPurple));
+        //create dialog
+        Dialog d = builder.create();
+        d.show();
+        createAlertDialog(d);
     }
 
     /**
@@ -235,13 +231,7 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
                 .setNegativeButton(android.R.string.cancel, null).setView(linearLayout);
 
         Dialog d = builder.show();
-        int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
-        View divider = d.findViewById(dividerId);
-        divider.setBackgroundColor(getResources().getColor(R.color.titleBarPurple));
-
-        int textViewId = d.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
-        TextView tv = (TextView) d.findViewById(textViewId);
-        tv.setTextColor(getResources().getColor(R.color.titleBarPurple));
+        createAlertDialog(d);
     }
 
     /**
@@ -266,6 +256,10 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
                 .setNegativeButton("No", null);
 
         Dialog d = builder.show();
+        createAlertDialog(d);
+    }
+
+    private void createAlertDialog(Dialog d) {
         int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
         View divider = d.findViewById(dividerId);
         divider.setBackgroundColor(getResources().getColor(R.color.titleBarPurple));

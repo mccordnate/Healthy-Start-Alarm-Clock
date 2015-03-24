@@ -1,6 +1,9 @@
 package vandyhacks.dios.hsphuc.healthystart;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.media.AudioManager;
@@ -15,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -56,6 +60,24 @@ public class GenerateAlarmActivity extends Activity {
             mp.start();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        if (HealthyStartApplication.user.isFirstAlarm()) {
+            HealthyStartApplication.user.setFirstAlarm(false);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                    .setTitle("Instructions")
+                    .setMessage("To measure heart rate, place your fingertip on the camera")
+                    .setPositiveButton("Okay", null);
+
+            Dialog d = builder.show();
+            int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
+            View divider = d.findViewById(dividerId);
+            divider.setBackgroundColor(getResources().getColor(R.color.titleBarPurple));
+
+            int textViewId = d.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
+            TextView tv = (TextView) d.findViewById(textViewId);
+            tv.setTextColor(getResources().getColor(R.color.titleBarPurple));
         }
     }
 

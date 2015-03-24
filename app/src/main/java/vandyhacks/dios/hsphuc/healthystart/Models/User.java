@@ -15,6 +15,15 @@ public class User {
 
     private int age;
     private boolean loaded;
+    private boolean firstAlarm = true;
+
+    public boolean isFirstAlarm() {
+        return firstAlarm;
+    }
+
+    public void setFirstAlarm(boolean firstAlarm) {
+        this.firstAlarm = firstAlarm;
+    }
 
     /**
      * Null constructor to be used when just loading data from the device
