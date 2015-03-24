@@ -1,5 +1,6 @@
 package vandyhacks.dios.hsphuc.healthystart;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -112,36 +114,45 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
      * Opens a dialog for selecting a user's age if they have not entered it before.
      */
     private void showAgeDialog() {
-        final Dialog d = new Dialog(this);
-        d.setTitle("Select your age");
-        d.setContentView(R.layout.age_dialog);
-        Button b1 = (Button) d.findViewById(R.id.button1);
-        final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
-        np.setMaxValue(99);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        final NumberPicker np = new NumberPicker(this);
         np.setMinValue(1);
+        np.setMaxValue(99);
         int curAge = ((HealthyStartApplication) getApplication()).user.getAge();
         np.setValue( (curAge == -1) ? 20 : curAge);
         np.setWrapSelectorWheel(false);
-        b1.setOnClickListener(new View.OnClickListener() {
+        final FrameLayout parent = new FrameLayout(this);
+        parent.addView(np, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                Gravity.CENTER));
+        builder.setView(parent);
+        //set bottoni dialog
+        builder.setTitle("Change age");
+        builder.setPositiveButton("Set Age", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(DialogInterface dialog, int which) {
                 age = np.getValue();
 
                 // Set the user's age and save it to the device
                 ((HealthyStartApplication) getApplication()).user = new User(age);
                 SharedPreferences sharedPreferences = getSharedPreferences(User.PREFS_NAME, MODE_PRIVATE);
                 ((HealthyStartApplication) getApplication()).user.save(sharedPreferences);
-                d.dismiss();
+
+                alarmsAdapter.notifyDataSetChanged();
             }
         });
-        d.show();
 
-        int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
-        View divider = d.findViewById(dividerId);
+        //visualizzo il dialog
+        Dialog dialog = builder.create();
+        dialog.show();
+        int dividerId = dialog.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
+        View divider = dialog.findViewById(dividerId);
         divider.setBackgroundColor(getResources().getColor(R.color.titleBarPurple));
 
-        int textViewId = d.getContext().getResources().getIdentifier("android:id/title", null, null);
-        TextView tv = (TextView) d.findViewById(textViewId);
+        int textViewId = dialog.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
+        TextView tv = (TextView) dialog.findViewById(textViewId);
         tv.setTextColor(getResources().getColor(R.color.titleBarPurple));
     }
 
@@ -170,7 +181,7 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
         intensityBarTitle.setGravity(Gravity.CENTER_HORIZONTAL);
         intensityBarTitle.setTextSize(20f);
         intensityBarTitle.setTextColor(getResources().getColor(R.color.titleBarPurple));
-        intensityBarTitle.setText("Intensity: " + tempAlarm.getIntensity() + "%");
+        intensityBarTitle.setText("Target: " + HealthyStartApplication.user.findTargetHeartrate(tempAlarm.getIntensity()) + " bpm");
 
         final SeekBar intensityBar = new SeekBar(this);
         intensityBar.setMax(50);
@@ -178,7 +189,7 @@ public class AlarmsActivity extends ActionBarActivity implements AlarmListCallba
         intensityBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                intensityBarTitle.setText("Intensity: " + (progress + 35) + "%");
+                intensityBarTitle.setText("Target: " + HealthyStartApplication.user.findTargetHeartrate(progress + 35) + " bpm");
                 tempAlarm.setIntensity(progress + 35);
             }
 
