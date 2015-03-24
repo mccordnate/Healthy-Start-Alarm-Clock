@@ -19,6 +19,7 @@ public class HealthyStartApplication extends Application {
         user.load(this.getSharedPreferences(User.PREFS_NAME, MODE_PRIVATE));
         if (user.getAge() != -1) {
             user.setLoaded(true);
+            user.setFirstAlarm(false);
         }
     }
 
